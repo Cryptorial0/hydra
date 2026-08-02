@@ -122,7 +122,6 @@ export function BigPictureCloudSaveProvider({
   const gameKey = `${shop}:${objectId}`;
   const activeGameKey = useRef(gameKey);
   const gamePageSyncInFlight = useRef(false);
-  const gamePageSyncCompleted = useRef(false);
 
   activeGameKey.current = gameKey;
 
@@ -169,7 +168,6 @@ export function BigPictureCloudSaveProvider({
     setIsFileExplorerVisible(false);
     setPendingResolution(null);
     gamePageSyncInFlight.current = false;
-    gamePageSyncCompleted.current = false;
   }, [gameKey]);
 
   useEffect(() => {
@@ -262,7 +260,6 @@ export function BigPictureCloudSaveProvider({
         isGameRunning,
         isSyncing,
         isInFlight: gamePageSyncInFlight.current,
-        isCompleted: gamePageSyncCompleted.current,
       })
     ) {
       return;
@@ -273,11 +270,6 @@ export function BigPictureCloudSaveProvider({
 
     void globalThis.window.electron
       .syncCloudSaveOnGamePage(objectId, shop)
-      .then((response) => {
-        if (activeGameKey.current === requestedGame && response.accepted) {
-          gamePageSyncCompleted.current = true;
-        }
-      })
       .catch((error) => {
         if (activeGameKey.current !== requestedGame) return;
         const isLimitError = showSyncError(error);
