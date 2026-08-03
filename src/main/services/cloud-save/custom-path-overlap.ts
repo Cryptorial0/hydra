@@ -127,6 +127,7 @@ export const registerCloudSaveCustomPathWithoutOverlap = async ({
   currentRawPath,
   remoteRelativePaths = [],
   assertCanRegister,
+  syncState = "confirmed",
 }: {
   objectId: string;
   shop: GameShop;
@@ -135,6 +136,7 @@ export const registerCloudSaveCustomPathWithoutOverlap = async ({
   currentRawPath?: string;
   remoteRelativePaths?: string[];
   assertCanRegister?: () => void;
+  syncState?: "pending" | "confirmed";
 }) => {
   const approvedRules = await getApprovedCloudSaveRules(
     objectId,
@@ -146,6 +148,7 @@ export const registerCloudSaveCustomPathWithoutOverlap = async ({
   );
   await registerCloudSaveCustomPaths(shop, objectId, [customPath], {
     context: customPathContext,
+    syncState,
     assertCurrentBindings: (bindings) => {
       assertCanRegister?.();
       const result = checkOverlap({
