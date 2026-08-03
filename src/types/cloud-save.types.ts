@@ -493,6 +493,9 @@ export interface ResolvedRestoreTarget extends RestoreManifestFile {
   targetPath: string;
   restoreRootPath: string;
   action: RestorePlanActionKind;
+  observedHash?: string;
+  observedSizeBytes?: number;
+  observedLastModifiedAt?: string;
 }
 
 export type BlockedRestoreReason =
